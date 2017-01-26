@@ -20,6 +20,7 @@ public class Train {
             File spamDir = new File("C:\\Users\\Eric\\IdeaProjects\\InteractiveLearner\\src\\corpus-mails\\corpus\\training\\spam");
             File[] spamFiles = spamDir.listFiles();
             wordCount(spamFiles,spamMap);
+            wordFilter(normalMap, spamMap);
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
@@ -28,7 +29,7 @@ public class Train {
     public static void wordCount(File[] files, Map<String,Integer> countlst) throws IOException {
         if (files != null) {
             for (File child : files) {
-                String string = readFile(child.getPath(), StandardCharsets.UTF_8);
+                String string = readFile(child.getPath());
                 String[] words = tokenizer(string);
                 List<String> exists = new ArrayList<>();
                 for (String word : words) {
@@ -47,10 +48,9 @@ public class Train {
         }
     }
 
-    public static String readFile(String path, Charset encoding) throws IOException
-    {
+    public static String readFile(String path) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, encoding);
+        return new String(encoded, StandardCharsets.UTF_8);
     }
 
     public static String[] tokenizer(String file) {
@@ -81,6 +81,10 @@ public class Train {
 
         // String to Array
         return result.split(" ");
+    }
+
+    public static void wordFilter(Map<String, Integer> c1, Map<String, Integer> c2) {
+
     }
 
 
