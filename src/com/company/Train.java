@@ -11,16 +11,29 @@ public class Train {
 
     public static Map<String, Integer> normalMap = new HashMap<>();
     public static Map<String, Integer> spamMap = new HashMap<>();
+    public static int amountSpam;
+    public static int amountNormal;
 
     public static void main(String[] args) {
         try {
             File normalDir = new File("C:\\Users\\Eric\\IdeaProjects\\InteractiveLearner\\src\\corpus-mails\\corpus\\training\\normal");
             File[] normalFiles = normalDir.listFiles();
+            amountNormal = normalFiles.length;
             wordCount(normalFiles, normalMap);
             File spamDir = new File("C:\\Users\\Eric\\IdeaProjects\\InteractiveLearner\\src\\corpus-mails\\corpus\\training\\spam");
             File[] spamFiles = spamDir.listFiles();
+            amountSpam = spamFiles.length;
             wordCount(spamFiles,spamMap);
-            wordFilter(normalMap, spamMap);
+            for (Map.Entry<String,Integer> e : normalMap.entrySet()) {
+                if (e.getValue() < 5) {
+                    normalMap.remove(e);
+                }
+            }
+            for (Map.Entry<String,Integer> e : spamMap.entrySet()) {
+                if (e.getValue() < 5) {
+                    spamMap.remove(e);
+                }
+            }
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
@@ -81,10 +94,6 @@ public class Train {
 
         // String to Array
         return result.split(" ");
-    }
-
-    public static void wordFilter(Map<String, Integer> c1, Map<String, Integer> c2) {
-
     }
 
 
