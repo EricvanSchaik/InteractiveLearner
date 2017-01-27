@@ -12,13 +12,7 @@ public class Test {
         try {
             String string = Train.readFile(testFilepath[0]);
             String[] words = Train.tokenizer(string);
-            int spamCount = 0;
-            int normalCount = 0;
-            for (String word : words) {
-                spamCount = Train.spamMap.containsKey(word) && chi(word) ? Train.spamMap.get(word).intValue() + spamCount : spamCount;
-                normalCount = Train.normalMap.containsKey(word) && chi(word) ? Train.normalMap.get(word).intValue() + normalCount : normalCount;
-            }
-            System.out.printf(spamCount > normalCount ? "spam" : "normal");
+            System.out.println(isSpam(words) ? "The text is classified as spam\n" : "The text is classified as normal\n");
             Scanner in = new Scanner(System.in);
             System.out.println("Please enter the true class of the text by typing 'spam' or 'normal'");
             boolean gotAnswer = false;
@@ -31,28 +25,52 @@ public class Test {
                     }
                 }
             }
-            for (String word : words) {
-                if (answer.equals("spam") && Train.spamMap.containsKey(word)) {
-                    Train.spamMap.put(word, Train.spamMap.get(word) + 1);
-                }
-                else if (answer.equals("normal") && Train.normalMap.containsKey(word)) {
-                    Train.normalMap.put(word, Train.normalMap.get(word) +1);
-                }
-            }
-            if (answer.equals("spam")) {
-                Train.amountSpam++;
-            }
-            else {
-                Train.amountNormal++;
-            }
+            updateKnowledge(answer, words);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public static boolean isSpam(String[] words) {
+        int spamCount = 0;
+        int normalCount = 0;
+        for (String word : words) {
+            if (Train.spamMap.containsKey(word)) {
+                spamCount = chi(word) ? Train.spamMap.get(word).intValue() + spamCount : spamCount;
+            }
+            if (Train.normalMap.containsKey(word)) {
+                normalCount = chi(word) ? Train.normalMap.get(word).intValue() + normalCount : normalCount;
+            }
+        }
+        return spamCount > normalCount ? true : false;
+    }
+
+    public static void updateKnowledge(String answer, String[] words) {
+        for (String word : words) {
+            if (answer.equals("spam") && Train.spamMap.containsKey(word)) {
+                Train.spamMap.put(word, Train.spamMap.get(word) + 1);
+            }
+            else if (answer.equals("normal") && Train.normalMap.containsKey(word)) {
+                Train.normalMap.put(word, Train.normalMap.get(word) +1);
+            }
+        }
+        if (answer.equals("spam")) {
+            Train.amountSpam++;
+        }
+        else {
+            Train.amountNormal++;
+        }
+    }
+
     public static boolean chi(String wordToTest) {
         // Set all expected values
-        int w = Train.spamMap.get(wordToTest)+Train.normalMap.get(wordToTest);
+        int w = 0;
+        if (Train.spamMap.containsKey(wordToTest)) {
+            w += Train.spamMap.get(wordToTest).intValue();
+        }
+        if (Train.normalMap.containsKey(wordToTest)) {
+            w += Train.normalMap.get(wordToTest).intValue();
+        }
         int c = Train.amountSpam;
         int n = Train.amountNormal + Train.amountSpam;
         int e1 = w*c/n;
@@ -66,8 +84,14 @@ public class Test {
 
 
         // Set all observed values
-        int a = Train.spamMap.get(wordToTest);
-        int b = Train.normalMap.get(wordToTest);
+        int a = 0;
+        int b = 0;
+        if (Train.spamMap.containsKey(wordToTest)) {
+            a = Train.spamMap.get(wordToTest);
+        }
+        if (Train.normalMap.containsKey(wordToTest)) {
+            b = Train.normalMap.get(wordToTest);
+        }
         int d = Train.amountSpam - a;
         int e = Train.amountNormal - b;
         int[] observed = {a, b, d, e};
