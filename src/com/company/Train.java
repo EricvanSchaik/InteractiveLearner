@@ -1,7 +1,7 @@
 package com.company;
 
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -62,8 +62,8 @@ public class Train {
     }
 
     public static String readFile(String path) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, StandardCharsets.UTF_8);
+        byte[] filebytes = Files.readAllBytes(Paths.get(path));
+        return new String(filebytes, StandardCharsets.UTF_8);
     }
 
     public static String[] tokenizer(String file) {

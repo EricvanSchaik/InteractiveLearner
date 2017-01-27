@@ -62,18 +62,24 @@ public class Test {
         int e4 = w*c/n;
         c = Train.amountSpam;
         int e3 = w*c/n;
-        long[] expected = {e1, e2, e3, e4};
+        int[] expected = {e1, e2, e3, e4};
+
 
         // Set all observed values
         int a = Train.spamMap.get(wordToTest);
         int b = Train.normalMap.get(wordToTest);
         int d = Train.amountSpam - a;
         int e = Train.amountNormal - b;
-        long[] observed = {a, b, d, e};
+        int[] observed = {a, b, d, e};
 
-        // Chitest
-        //return chiSquareTestTest.(expected, observed, (double) 5);
-        return false;
+        // Chitest for df = 1 and alfa = 0.05
+        int chi = (int) (Math.pow(a-e1, 2)/e1 + Math.pow(b-e2, 2)/e2 + Math.pow(d-e3, 2)/e3 + Math.pow(e-e4, 2)/e4);
+        if (chi >= 3.84){
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }
