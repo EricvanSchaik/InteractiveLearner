@@ -19,11 +19,11 @@ public class Train {
 
 	public static void main(String[] args) {
 		try {
-			File normalDir = new File("C:\\Users\\Eric\\IdeaProjects\\InteractiveLearner\\src\\corpus-mails\\corpus\\training\\normal");
+			File normalDir = new File("src\\corpus-mails\\corpus\\training\\normal");
 			File[] normalFiles = normalDir.listFiles();
 			amountNormal = normalFiles.length;
 			wordCount(normalFiles, normalMap);
-			File spamDir = new File("C:\\Users\\Eric\\IdeaProjects\\InteractiveLearner\\src\\corpus-mails\\corpus\\training\\spam");
+			File spamDir = new File("src\\corpus-mails\\corpus\\training\\spam");
 			File[] spamFiles = spamDir.listFiles();
 			amountSpam = spamFiles.length;
 			wordCount(spamFiles,spamMap);
