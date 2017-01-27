@@ -16,11 +16,11 @@ public class Train {
 
     public static void main(String[] args) {
         try {
-            File normalDir = new File("C:\\Users\\Eric\\IdeaProjects\\InteractiveLearner\\src\\corpus-mails\\corpus\\training\\normal");
+            File normalDir = new File("C:\\Users\\Birte\\IdeaProjects\\InteractiveLearner\\src\\corpus-mails\\corpus\\training\\normal");
             File[] normalFiles = normalDir.listFiles();
             amountNormal = normalFiles.length;
             wordCount(normalFiles, normalMap);
-            File spamDir = new File("C:\\Users\\Eric\\IdeaProjects\\InteractiveLearner\\src\\corpus-mails\\corpus\\training\\spam");
+            File spamDir = new File("C:\\Users\\Birte\\IdeaProjects\\InteractiveLearner\\src\\corpus-mails\\corpus\\training\\spam");
             File[] spamFiles = spamDir.listFiles();
             amountSpam = spamFiles.length;
             wordCount(spamFiles,spamMap);
@@ -34,6 +34,7 @@ public class Train {
                     spamMap.remove(e);
                 }
             }
+            System.out.println("klaar");
         } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
@@ -62,8 +63,8 @@ public class Train {
     }
 
     public static String readFile(String path) throws IOException {
-        byte[] filebytes = Files.readAllBytes(Paths.get(path));
-        return new String(filebytes, StandardCharsets.UTF_8);
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, StandardCharsets.UTF_8);
     }
 
     public static String[] tokenizer(String file) {
@@ -82,18 +83,16 @@ public class Train {
         // Delete all special characters
         int a = Character.getNumericValue("a".charAt(0));
         int z = Character.getNumericValue("z".charAt(0));
-        int A = Character.getNumericValue("A".charAt(0));
-        int Z = Character.getNumericValue("Z".charAt(0));
         for (char c : result.toCharArray()){
             int dec = Character.getNumericValue(c);
-            if (!((a<=dec)&&(A<=dec)&&(z>=dec)&&(Z>=dec))){
-                result = result.replace(c, "".charAt(0));
+            if (!(((a<=dec)&&(z>=dec))||String.valueOf(c).equals(" "))){
+                result = result.replace(String.valueOf(c), "");
             }
         }
-        System.out.println(result);
 
         // String to Array
-        return result.split(" ");
+        String[] resultarray = result.split(" ");
+        return resultarray;
     }
 
 
